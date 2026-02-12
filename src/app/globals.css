@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+/* ===============================
+   Root Theme Variables
+================================ */
+:root {
+  --color-background: #fafafa;
+
+  --color-primary-red: #8F1414;
+  --color-secondary-red: #931f1f;
+  --color-hover-red: #ad1f1f;
+  --color-text-red: #bf4040;
+
+  --color-heading: #1f1f1f;
+  --color-paragraph: #666666;
+  --color-border:#e0e0e0;
+  
+}
+
+/* ===============================
+   Tailwind Theme Mapping
+   (THIS is what @theme inline is for)
+================================ */
+@theme inline {
+  --color-background: var(--color-background);
+
+  --color-primary-red: var(--color-primary-red);
+  --color-secondary-red: var(--color-secondary-red);
+  --color-hover-red: var(--color-hover-red);
+  --color-text-red: var(--color-text-red);
+
+  --color-heading: var(--color-heading);
+  --color-paragraph: var(--color-paragraph);
+}
+@layer base {
+  *, ::before, ::after {
+    border-color: var(--color-border);
+  }
+}
+/* ===============================
+   Dark Mode (Optional)
+================================ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #0f0f0f;
+    --color-heading: #ffffff;
+    --color-paragraph: #cfcfcf;
+  }
+}
+
+/* ===============================
+   Base Styles
+================================ */
+body {
+  width: 100%;
+  overflow-x: hidden;
+  background-color: var(--color-background);
+  color: var(--color-paragraph);
+  font-family: Arial, Helvetica, sans-serif;
+}
