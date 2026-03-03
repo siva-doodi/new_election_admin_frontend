@@ -5,7 +5,7 @@ import CandidateCard from '@/app/components/candidates/CandidateCard'
 import CandidatesListSkeleton from '@/app/components/Shimmer/CandidatesListSkeleton'
 import { useApproveCandidate } from '@/hooks/nominations/useApproveNomination'
 import { useEvents } from '@/hooks/meta/useEvents'
-import { useSendNominationNotification } from '@/hooks/nominations/useSendNominationNotification'
+
 import FiltersBar from '@/app/components/ui/FiltersBar'
 import Button from '@/app/components/ui/Button'
 import LocationPopup from '@/app/components/elections/LocationPopUp'
