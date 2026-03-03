@@ -2,7 +2,8 @@
 import { useEffect, useState } from 'react'
 import { fetchElections } from '../../lib/elections/elections.client'
 import { mapElectionToCard } from '../../utils/electionMapper'
-export function useElections(status) {
+
+export function useElections(locationFilter) {
   const [elections, setElections] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -12,8 +13,9 @@ export function useElections(status) {
       try {
         setLoading(true)
         setError(null)
-        const data = await fetchElections(status)
+        const data = await fetchElections(locationFilter)
         setElections(data.map(mapElectionToCard))
+
       } catch (err) {
         setError(err)
       } finally {
@@ -22,7 +24,7 @@ export function useElections(status) {
     }
 
     load()
-  }, [status])
+  }, [locationFilter])
 
   return {
     elections,

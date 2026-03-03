@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react'
 import { fetchNominations } from '@/lib/nominations/nominations.client'
 import { mapNominationCard } from '@/utils/nominations/nominationMapper'
-
-export function useNominations() {
+export function useNominations(locationFilter) {
   const [nominations, setNominations] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -15,10 +14,9 @@ export function useNominations() {
         setLoading(true)
         setError(null)
 
-        const data = await fetchNominations()
+        const data = await fetchNominations(locationFilter)
+        const mapped = data.items.map(mapNominationCard)
 
-        // ✅ APPLY MAPPER HERE
-        const mapped = data.nominations.map(mapNominationCard)
         setNominations(mapped)
 
       } catch (err) {
@@ -29,7 +27,7 @@ export function useNominations() {
     }
 
     load()
-  }, [])
+  }, [locationFilter])
 
   return {
     nominations,

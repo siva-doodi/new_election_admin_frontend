@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { fetchResults } from '@/lib/results/results.client'
 import { mapResultToCard } from '@/utils/results/resultsMapper'
-export function useResults({ page = 1, limit = 10, election_level = 'all',assembly_id = 'all', }) {
+export function useResults(locationFilter) {
   const [results, setResults] = useState([])
   const [pagination, setPagination] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -13,12 +13,7 @@ export function useResults({ page = 1, limit = 10, election_level = 'all',assemb
       try {
         setLoading(true)
         setError(null)
-        const data = await fetchResults({
-          page,
-          limit,
-          election_level,
-          assembly_id
-        })
+        const data = await fetchResults(locationFilter)
         setResults(data.items.map(mapResultToCard))
         setPagination(data.pagination)
       } catch (err) {
@@ -29,7 +24,7 @@ export function useResults({ page = 1, limit = 10, election_level = 'all',assemb
     }
 
     load()
-  }, [page, limit, election_level,assembly_id])
+  }, [locationFilter])
 
   return {
     results,

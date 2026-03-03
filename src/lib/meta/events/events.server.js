@@ -7,6 +7,5 @@ export async function fetchEventsServer(token) {
       Authorization: `Bearer ${token}`,
     },
   })
-
   return res.data
 }

@@ -1,55 +1,22 @@
 'use client'
 
-import { useState } from 'react'
+import { useState } from "react"
+import { rejectNominationServer } from "@/lib/nominations/nominations.server"
 
-const getCookie = (name) => {
-    if (typeof document === 'undefined') return null
+export const useRejectCandidate = (id,reason) => {
+  const [loading, setLoading] = useState(false)
 
-    const cookies = document.cookie.split('; ')
-    for (const cookie of cookies) {
-        const [key, value] = cookie.split('=')
-        if (key === name) return decodeURIComponent(value)
+  const reject = async (id, reason) => {
+    try {
+      setLoading(true)
+      const res = await rejectNominationServer(id, reason)
+      return res
+    } catch (error) {
+      throw error
+    } finally {
+      setLoading(false)
     }
-    return null
-}
+  }
 
-export function useRejectCandidate() {
-    const [loading, setLoading] = useState(false)
-
-    const reject = async (nominationId, reason) => {
-        setLoading(true)
-        try {
-            const token = getCookie('access_token')
-
-            if (!token) {
-                throw new Error('Access token not found in cookies')
-            }
-
-            const res = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/nominations/${nominationId}/reject`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Accept: 'application/json',
-                        Authorization: `Bearer ${token}`, // ✅ WORKS
-                    },
-                    body: JSON.stringify({ reason }),
-                }
-            )
-
-            if (!res.ok) {
-                const errorData = await res.json()
-                throw new Error(
-                    errorData?.detail?.[0]?.msg || 'Reject failed'
-                )
-            }
-
-            return await res.json()
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    return { reject, loading }
+  return { reject, loading }
 }

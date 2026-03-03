@@ -5,7 +5,7 @@ import { Search } from 'lucide-react'
 export default function FiltersBar({
   search,
   onSearchChange,
-
+  action,
   filters = [], // [{ key, value, options }]
 }) {
   return (
@@ -42,6 +42,17 @@ export default function FiltersBar({
           ))}
         </select>
       ))}
+      <div>
+        {
+          action && (
+            <div>
+              {
+                action
+              }
+            </div>
+          )
+        }
+      </div>
     </div>
   )
 }

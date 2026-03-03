@@ -38,56 +38,7 @@ export default function ResultCard({ result, onStatusClick }) {
           {result.location} · {capitalize(result.level)}
         </Text>
       </div>
-
-      {/* 🏆 Winner Detailed Section */}
-      {/* <div className="bg-green-50 border border-green-200 rounded-lg p-4 space-y-2">
-        <div className="flex items-center gap-2">
-          <Trophy className="text-green-600" size={20} />
-          <Text className="font-semibold text-green-800">
-            {result.winner || '—'}
-          </Text>
-        </div>
-
-        <div className="grid grid-cols-3 gap-3 text-center">
-          <WinnerStat
-            icon={<Users size={14} />}
-            label="Votes"
-            value={Number(result.winnerVotes || 0).toLocaleString()}
-          />
-          <WinnerStat
-            icon={<Percent size={14} />}
-            label="Vote %"
-            value={`${Number(result.winnerVotePercent || 0)}%`}
-          />
-          <WinnerStat
-            icon={<BarChart2 size={14} />}
-            label="Total Votes"
-            value={Number(result.totalVotes || 0).toLocaleString()}
-          />
-        </div>
-      </div> */}
-
-      {/* Stats */}
-      <div className="grid grid-cols-3 gap-3 text-center">
-        <Stat
-          icon={<Users size={16} />}
-          label="Total Votes"
-          value={Number(result.totalVotes || 0).toLocaleString()}
-        />
-        <Stat
-          icon={<BarChart2 size={16} />}
-          label="Votes Cast"
-          value={Number(result.votesCast || result.totalVotes || 0).toLocaleString()}
-        />
-        <Stat
-          icon={<BarChart2 size={16} />}
-          label="Winner Votes"
-          value={Number(result.winnerVotes || 0).toLocaleString()}
-        />
-      </div>
-
-      {/* Candidates */}
-      {Array.isArray(result.candidates) && result.candidates.length > 0 && (
+        {Array.isArray(result.candidates) && result.candidates.length > 0 && (
         <div className="border-t pt-4 space-y-2">
           <Text className="text-sm font-semibold">
             Candidates
@@ -127,6 +78,26 @@ export default function ResultCard({ result, onStatusClick }) {
         </div>
       )}
 
+      <div className="grid grid-cols-3 gap-3 text-center">
+        <Stat
+          icon={<Users size={16} />}
+          label="Total Votes"
+          value={Number(result.totalVotes || 0).toLocaleString()}
+        />
+        <Stat
+          icon={<BarChart2 size={16} />}
+          label="Votes Cast"
+          value={Number(result.votesCast || result.totalVotes || 0).toLocaleString()}
+        />
+        <Stat
+          icon={<BarChart2 size={16} />}
+          label="Winner Votes"
+          value={Number(result.winnerVotes || 0).toLocaleString()}
+        />
+      </div>
+
+      {/* Candidates */}
+    
       {/* Footer */}
       <Text variant="muted" className="text-xs">
         Result Published: {formatDate(result.publishedAt)}

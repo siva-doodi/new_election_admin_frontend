@@ -10,7 +10,7 @@ export function useDistricts() {
 
     async function load() {
       try {
-        debugger
+        
         setLoading(true)
         setError(null)
         const data = await fetchDistricts()

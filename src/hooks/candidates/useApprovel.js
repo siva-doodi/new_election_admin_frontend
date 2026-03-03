@@ -6,7 +6,7 @@ export function useApproveCandidate() {
   const [error, setError] = useState(null)
 
   const approve = async (candidateId) => {
-    debugger
+    
     console.log(candidateId,"pppp")
     try {
       setLoading(true)

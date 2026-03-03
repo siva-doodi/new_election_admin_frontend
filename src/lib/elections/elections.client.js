@@ -1,13 +1,32 @@
-export async function fetchElections(status) {
-  const query = status && status !== 'all' ? `?status=${status}` : ''
-  const res = await fetch(`/api/elections${query}`)
+export async function fetchElections(locationFilter) {
+
+  const params = {}
+
+  if (locationFilter?.assemblyId)
+    params.assembly_id = locationFilter.assemblyId
+
+  if (locationFilter?.mandalId)
+    params.mandal_id = locationFilter.mandalId
+
+  if (locationFilter?.villageId)
+    params.village_id = locationFilter.villageId
+
+  if (locationFilter?.wardId)
+    params.ward_id = locationFilter.wardId
+
+  const queryString = new URLSearchParams(params).toString()
+
+  const url = queryString
+    ? `/api/elections?${queryString}`
+    : `/api/elections`
+
+  const res = await fetch(url)
+
   if (!res.ok) {
-    throw {
-      message: data.message || 'Failed to fetch elections',
-      code: data.code || 'UNKNOWN_ERROR',
-      status: res.status,
-    }
+    const data = await res.json()
+    throw new Error(data.message || 'Failed to fetch elections')
   }
+
   return res.json()
 }
 export async function createElectionClient(payload) {

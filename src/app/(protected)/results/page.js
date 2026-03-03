@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import DashboardHeader from '@/app/components/layout/DashboardHeader'
 import FiltersBar from '@/app/components/ui/FiltersBar'
@@ -8,47 +7,32 @@ import ResultsList from '@/app/components/results/ResultsList'
 import { useResults } from '@/hooks/results/useResults'
 import { useAssemblies } from '@/hooks/meta/useAssemblies'
 import { publishResults } from '@/lib/results/results.client'
-
+import LocationPopup from '@/app/components/elections/LocationPopUp'
+import Button from '@/app/components/ui/Button'
 export default function ResultsPage() {
   const [page, setPage] = useState(1)
   const [limit] = useState(10)
   const [electionLevel, setElectionLevel] = useState('all')
   const [assemblyId, setAssemblyId] = useState('all')
 
-  const { assemblies = [] } = useAssemblies()
+  const { assemblies} = useAssemblies()
 
   const [publishLoading, setPublishLoading] = useState(false)
   const [publishError, setPublishError] = useState(null)
-
-  const assemblyOptions = [
-    { label: 'All Assemblies', value: 'all' },
-    ...assemblies.map(a => ({
-      label: a.name,
-      value: String(a.id),
-    })),
-  ]
-
-  const {
-    results,
-    loading,
-    error,
-    clearError,
-  } = useResults({
-    page,
-    limit,
-    election_level: electionLevel,
-    assembly_id: assemblyId,
-  })
-
+  const [locationFilter, setLocationFilter] = useState(null);
+  const [openLocationModel, setLocationModel] = useState(false)
+  const {results,loading,error, clearError,} = useResults(locationFilter)
+ const openLocation = () => setLocationModel(true)
+    const closeLocation = () => setLocationModel(false)
   useEffect(() => {
     setPage(1)
   }, [electionLevel, assemblyId])
 
   const handlePublishResult = async (id) => {
+    
     try {
       setPublishLoading(true)
       setPublishError(null)
-
       const res = await publishResults(Number(id))
       console.log('✅ PUBLISHED:', res)
     } catch (err) {
@@ -58,7 +42,10 @@ export default function ResultsPage() {
       setPublishLoading(false)
     }
   }
-
+  const handleLocationSelect = (data) => {
+        setLocationFilter(data);
+        setLocationModel(false);
+    };
   return (
     <div className="space-y-6">
       <DashboardHeader
@@ -67,26 +54,7 @@ export default function ResultsPage() {
       />
 
       <FiltersBar
-        filters={[
-          {
-            key: 'level',
-            value: electionLevel,
-            onChange: setElectionLevel,
-            options: [
-              { label: 'All Types', value: 'all' },
-              { label: 'Ward', value: 'ward' },
-              { label: 'District', value: 'district' },
-              { label: 'Assembly', value: 'assembly' },
-              { label: 'Parliament', value: 'parliament' },
-            ],
-          },
-          {
-            key: 'assembly',
-            value: assemblyId,
-            onChange: setAssemblyId,
-            options: assemblyOptions,
-          },
-        ]}
+        action={<Button onClick={openLocation}>Location Pop Up</Button>}
       />
 
       {(error || publishError) && (
@@ -109,6 +77,17 @@ export default function ResultsPage() {
           loading={publishLoading}
         />
       )}
+      {
+                      openLocationModel && (
+                          <LocationPopup
+                              open={openLocationModel}
+                              onClose={closeLocation}
+                              assemblies={assemblies}
+                              onSelect={handleLocationSelect}
+                              title= "Results"
+                          />
+                      )
+                  }
     </div>
   )
 }
