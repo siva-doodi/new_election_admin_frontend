@@ -4,8 +4,9 @@ import { useNominations } from '@/hooks/nominations/useNominations'
 import CandidateCard from '@/app/components/candidates/CandidateCard'
 import CandidatesListSkeleton from '@/app/components/Shimmer/CandidatesListSkeleton'
 import { useApproveCandidate } from '@/hooks/nominations/useApproveNomination'
+import { useRejectCandidate } from '@/hooks/nominations/useRejectNomination'
 import { useEvents } from '@/hooks/meta/useEvents'
-
+import { useSendNominationNotification } from '@/hooks/nominations/useSendNominationNotification'
 import FiltersBar from '@/app/components/ui/FiltersBar'
 import Button from '@/app/components/ui/Button'
 import LocationPopup from '@/app/components/elections/LocationPopUp'
@@ -25,7 +26,7 @@ export default function MembersPage() {
   const { nominations, loading } = useNominations(locationFilter)
   const openLocation = () => setLocationModel(true)
   const closeLocation = () => setLocationModel(false)
-
+ 
   const { assemblies } = useAssemblies()
   /* ESC key close */
   useEffect(() => {
@@ -35,13 +36,13 @@ export default function MembersPage() {
     window.addEventListener('keydown', handleEsc)
     return () => window.removeEventListener('keydown', handleEsc)
   }, [])
-
+ 
   const handleApprove = async (nominationId) => {
-    if (approvingId) return 
-
+    if (approvingId) return
+ 
     try {
       setApprovingId(nominationId)
-
+ 
       const res = await approve(nominationId)
       if (res) {
         alert('Approved Successfully')
@@ -66,7 +67,7 @@ export default function MembersPage() {
       alert(res.message || 'Nomination rejected')
       window.location.reload()
     }
-
+ 
   } catch (error) {
     alert(error.message || 'Failed to reject nomination')
   }
@@ -86,12 +87,12 @@ export default function MembersPage() {
   }
   if (loading) return <CandidatesListSkeleton />
   const handleLocationSelect = (data) => {
-
+ 
     setLocationFilter(data);
     setLocationModel(false);
   };
-
-
+ 
+ 
   return (
     <>
       <DashboardHeader
@@ -153,7 +154,7 @@ export default function MembersPage() {
               >
                 Cancel
               </button>
-
+ 
               {/* SEND */}
               <button
                 onClick={handleSendNotification}
@@ -183,3 +184,5 @@ export default function MembersPage() {
     </>
   )
 }
+ 
+ 
